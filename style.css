@@ -127,5 +127,28 @@ a:hover {
     }
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Responsive text */
+h1, h2, p {
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+/* Make layout adjust on small screens */
+@media(max-width: 600px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    img {
+        width: 100%;
+    }
+}
+
 
 
