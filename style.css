@@ -101,6 +101,31 @@ a:hover {
   text-shadow: 0 0 8px #00e5ff;
 }
 
+/* Mobile Responsive Fix */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 26px;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 22px;
+        text-align: center;
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.6;
+        text-align: center;
+    }
+
+    nav a {
+        display: block;
+        margin: 8px 0;
+        font-size: 20px;
+        text-align: center;
+    }
+}
 
 
 
