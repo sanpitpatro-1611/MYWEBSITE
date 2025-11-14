@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallery | Sanpit Patro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About Me</a>
+    <a href="contact.html">Contact</a>
+    <a href="gallery.html" class="active">Gallery</a>
+  </nav>
+
+  <header>
+    <h1>Photo Gallery</h1>
+    <p>Some of my favorite photos. Tap to open.</p>
+  </header>
+
+  <main class="container">
+    <div class="gallery-grid">
+      <!-- Copy & paste one card for each image -->
+      <figure class="gallery-item">
+        <a href="images/photo1.jpg" data-large="images/photo1.jpg">
+          <img src="images/photo1.jpg" alt="Photo 1">
+        </a>
+        <figcaption>Photo 1 caption (optional)</figcaption>
+      </figure>
+
+      <figure class="gallery-item">
+        <a href="images/photo2.jpg" data-large="images/photo2.jpg">
+          <img src="images/photo2.jpg" alt="Photo 2">
+        </a>
+        <figcaption>Photo 2 caption</figcaption>
+      </figure>
+
+      <!-- add more items in the same pattern -->
+    </div>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="expanded photo">
+  </div>
+
+  <footer>
+    © 2025 Sanpit Patro
+  </footer>
+
+<script>
+  // Simple JS lightbox (works on desktop and mobile)
+  document.querySelectorAll('.gallery-grid a').forEach(a=>{
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      const src = this.getAttribute('data-large') || this.href;
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      lbImg.src = src;
+      lb.style.display = 'flex';
+    });
+  });
+
+  function closeLightbox(){
+    const lb = document.getElementById('lightbox');
+    lb.style.display = 'none';
+    document.getElementById('lightbox-img').src = '';
+  }
+</script>
+
+</body>
+</html>
