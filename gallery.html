@@ -7,14 +7,24 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<nav class="navbar">
+    <div class="logo">Sanpit Patro</div>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About Me</a>
-    <a href="contact.html">Contact</a>
-    <a href="gallery.html" class="active">Gallery</a>
-  </nav>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Me</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
 
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+</nav>
+
+<script>
+function toggleMenu() {
+    document.getElementById("navLinks").classList.toggle("show");
+}
+</script>
   <header>
     <h1>Photo Gallery</h1>
     <p>Some of my favorite photos. Tap to open.</p>
@@ -32,7 +42,7 @@
 
   <figure class="gallery-item">
   <a href="iC:\Users\patro\OneDrive\Desktop\MYWEBSITE\images" data-large="C:\Users\patro\OneDrive\Desktop\MYWEBSITE\images">
-    <img src="C:\Users\patro\OneDrive\Desktop\MYWEBSITE\images" alt="anime" loading="great">
+    <img src="C:\Users\patro\OneDrive\Desktop\MYWEBSITE\images" alt="anime" loading="great	">
   </a>
   <figcaption>Me at the park — summer 2025</figcaption>
 </figure>

@@ -211,6 +211,141 @@ h1, h2, p {
     height: 140px;
   }
 }
+/* NAVBAR BASIC */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: rgba(0, 0, 60, 0.5);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #00e5ff;
+}
+
+.navbar .logo {
+    color: #00e5ff;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links li a {
+    color: #00e5ff;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
+/* HAMBURGER ICON */
+.menu-icon {
+    display: none;
+    font-size: 2em;
+    cursor: pointer;
+    color: #00e5ff;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        background: rgba(0, 0, 60, 0.7);
+        border: 1px solid #00e5ff;
+        padding: 15px;
+        flex-direction: column;
+        gap: 15px;
+        border-radius: 10px;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+}
+/* Default Desktop Menu */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.menu-icon {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: cyan;
+}
+.menu-icon {
+    display: none; /* HIDE hamburger in laptop */
+}
+
+.nav-links {
+    display: flex; /* SHOW normal menu in laptop */
+    gap: 25px;
+}
+
+/* ---------- MOBILE MENU ---------- */
+@media (max-width: 768px) {
+
+    .nav-links {
+        display: none;        /* hide menu on mobile */
+        flex-direction: column;
+        background: #00111f;
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .nav-links.show {
+        display: flex;        /* show menu when hamburger clicked */
+    }
+
+    .menu-icon {
+        display: block;       /* show hamburger button */
+    }
+
+    .navbar {
+        flex-direction: row;
+    }
+
+}
+@media (max-width: 768px) {
+
+    .nav-links {
+        display: none;              /* hide menu on mobile */
+        flex-direction: column;
+        background: #00111f;
+        width: 100%;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .nav-links.show {
+        display: flex;              /* show when hamburger opens */
+    }
+
+    .menu-icon {
+        display: block;             /* show hamburger on mobile */
+        font-size: 28px;
+        cursor: pointer;
+        color: cyan;
+    }
+}
 
 
 

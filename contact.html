@@ -6,15 +6,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Contact Me</h1>
-       <nav>
-  <a href="index.html">Home</a>
-  <a href="about.html">About Me</a>
-  <a href="contact.html">Contact</a>
-  <a href="gallery.html">Gallery</a>
+  <nav class="navbar">
+    <div class="logo">Sanpit Patro</div>
+
+    <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Me</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
 </nav>
-    </header>
+
+<script>
+function toggleMenu() {
+    document.getElementById("navLinks").classList.toggle("show");
+}
+</script>
+
+  <header>
+        <h1>Contact Me</h1>
+        </header>
 
     <main>
         <h2>Let’s Connect!</h2>
