@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Neon Tic-Tac-Toe — Advanced</title>
+<style>
+  :root{
+    --bg:#02030a;
+    --panel:rgba(255,255,255,0.03);
+    --muted:#9fb0c7;
+    --accent-x:#ff6bcb;   /* pink */
+    --accent-o:#4dd7ff;   /* cyan */
+    --glass: rgba(255,255,255,0.04);
+    --cell-size:calc(min(22vw, 110px));
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, Arial, sans-serif;
+    background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(77,215,255,0.03), transparent 8%),
+      radial-gradient(900px 500px at 90% 90%, rgba(255,107,203,0.02), transparent 10%),
+      var(--bg);
+    color:#e8f4ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+  }
+
+  .card{
+    width:100%;
+    max-width:980px;
+    border-radius:16px;
+    padding:18px;
+    display:grid;
+    grid-template-columns: 1fr 320px;
+    gap:18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03));
+    box-shadow: 0 10px 40px rgba(3,6,15,0.8);
+  }
+
+  @media (max-width:880px){
+    .card{grid-template-columns:1fr; padding:12px}
+  }
+
+  /* LEFT: Game */
+  .left {
+    padding:6px 10px;
+  }
+  h1{
+    margin:0 0 6px 0;
+    font-size:20px;
+    display:flex; gap:12px; align-items:center;
+  }
+  .subtitle{color:var(--muted); font-size:13px; margin-bottom:12px}
+
+  /* Board */
+  #board {
+    width:100%;
+    max-width: calc(var(--cell-size) * 3 + 20px);
+    margin:10px auto;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+    padding:10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
+    border-radius:14px;
+    touch-action: manipulation;
+  }
+
+  .cell {
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 220ms ease, box-shadow 220ms;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+  }
+  .cell:active{ transform: scale(.995) }
+  .cell:hover{ box-shadow: 0 6px 26px rgba(0,0,0,0.6) }
+
+  /* ripple */
+  .cell::after{
+    content:"";
+    position:absolute;
+    left:50%; top:50%;
+    width:0;height:0;border-radius:50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
+    transform:translate(-50%,-50%); opacity:0;
+    transition: width 360ms ease, height 360ms ease, opacity 320ms;
+  }
+  .cell.ripple::after{ width:300%; height:300%; opacity:1; transition: width 420ms, height 420ms, opacity 520ms; }
+
+  /* marks */
+  .mark{
+    font-weight:800;
+    font-size: calc(var(--cell-size) * 0.62);
+    line-height:1;
+    transform: scale(.1) rotate(-12deg);
+    opacity:0;
+    text-shadow: 0 12px 34px rgba(0,0,0,0.8);
+    transition: transform 360ms cubic-bezier(.18,.9,.35,1), opacity 260ms;
+    pointer-events:none;
+  }
+  .mark.show{ transform: scale(1) rotate(0); opacity:1; }
+
+  /* x and o neon */
+  .mark.x{
+    color: var(--accent-x);
+    text-shadow:
+      0 6px 30px rgba(255,107,203,0.12),
+      0 0 20px rgba(255,107,203,0.12),
+      0 0 6px rgba(255,107,203,0.25);
+  }
+  .mark.o{
+    color: var(--accent-o);
+    text-shadow:
+      0 6px 30px rgba(77,215,255,0.12),
+      0 0 20px rgba(77,215,255,0.12),
+      0 0 6px rgba(77,215,255,0.25);
+  }
+
+  /* side panel */
+  .panel {
+    padding:14px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
+    color:var(--muted);
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .status { font-weight:800; color:#fff; font-size:16px; }
+  .controls{ display:flex; gap:8px; align-items:center; margin-top:6px; flex-wrap:wrap }
+  .btn{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.06);
+    color:inherit;
+    padding:8px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:700;
+  }
+  .btn.primary{
+    background: linear-gradient(90deg, var(--accent-x), var(--accent-o));
+    color:#071026;
+    border:0;
+    box-shadow: 0 8px 30px rgba(6,182,212,0.06);
+  }
+  .small{ font-size:13px; padding:6px 10px; }
+
+  .score { color:var(--muted); font-size:13px; margin-top:8px }
+  .note { font-size:12px; color:var(--muted); margin-top:8px }
+
+  /* win line SVG overlay */
+  .win-line {
+    position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:40;
+  }
+
+  /* small footer */
+  .footer{ font-size:12px; color:var(--muted); margin-top:8px }
+
+</style>
+</head>
+<body>
+  <div class="card" role="application" aria-label="Neon Tic Tac Toe">
+    <div class="left">
+      <h1>
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden>
+          <circle cx="12" cy="12" r="10" fill="url(#g)"></circle>
+          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ff6bcb"/><stop offset="1" stop-color="#4dd7ff"/></linearGradient></defs>
+        </svg>
+        Neon Tic-Tac-Toe
+      </h1>
+      <div class="subtitle">Dark neon theme · touch-friendly · sound & vibration</div>
+
+      <div id="board" aria-label="game board" role="grid">
+        <!-- cells -->
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+        <svg class="win-line" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+      </div>
+
+      <div style="text-align:center; margin-top:12px;">
+        <button class="btn primary small" id="restartBtn">Restart</button>
+        <button class="btn small" id="undoBtn">Undo</button>
+      </div>
+    </div>
+
+    <aside class="panel" aria-label="controls">
+      <div class="status" id="statusLabel">Player X's Turn</div>
+
+      <div class="controls">
+        <label style="font-size:13px;color:var(--muted);">Mode</label>
+        <select id="mode" class="btn small" aria-label="mode">
+          <option value="pvp">2 Players (Local)</option>
+          <option value="ai-easy">Vs AI - Easy</option>
+          <option value="ai-hard">Vs AI - Hard</option>
+        </select>
+      </div>
+
+      <div class="controls">
+        <label style="font-size:13px;color:var(--muted);">Start</label>
+        <select id="starter" class="btn small">
+          <option value="X">X</option>
+          <option value="O">O</option>
+        </select>
+      </div>
+
+      <div class="controls">
+        <label style="font-size:13px;color:var(--muted);">Sound</label>
+        <button id="soundToggle" class="btn small">On</button>
+      </div>
+
+      <div class="score" id="scores">X: 0 &nbsp; O: 0 &nbsp; Draw: 0</div>
+      <div class="note">Tip: Tap squares on mobile. Undo reverts last user move (works for local games).</div>
+      <div class="footer">Made with ❤️ — Save file and open in browser</div>
+    </aside>
+  </div>
+
+<script>
+/* ---------- Neon Tic Tac Toe JS ---------- */
+/* state */
+const cells = Array.from(document.querySelectorAll('.cell'));
+const statusLabel = document.getElementById('statusLabel');
+const restartBtn = document.getElementById('restartBtn');
+const undoBtn = document.getElementById('undoBtn');
+const modeSelect = document.getElementById('mode');
+const starterSelect = document.getElementById('starter');
+const soundToggle = document.getElementById('soundToggle');
+const winSvg = document.querySelector('.win-line');
+const scoresEl = document.getElementById('scores');
+let board = Array(9).fill('');
+let currentPlayer = 'X';
+let active = true;
+let history = [];
+let scores = {X:0, O:0, D:0};
+let soundOn = true;
+
+/* winning combos */
+const wins = [
+  [0,1,2],[3,4,5],[6,7,8],
+  [0,3,6],[1,4,7],[2,5,8],
+  [0,4,8],[2,4,6]
+];
+
+/* WebAudio simple tones */
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+const audioCtx = AudioCtx ? new AudioCtx() : null;
+function playTone(freq=440, dur=0.08, type='sine', vol=0.06){
+  if(!audioCtx || !soundOn) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.type = type; o.frequency.value = freq;
+  g.gain.value = vol;
+  o.connect(g); g.connect(audioCtx.destination);
+  o.start();
+  g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+  setTimeout(()=> o.stop(), dur*1000 + 20);
+}
+
+/* helper - ripple */
+function ripple(cell){
+  cell.classList.remove('ripple');
+  void cell.offsetWidth;
+  cell.classList.add('ripple');
+  if(navigator.vibrate) navigator.vibrate(18);
+}
+
+/* render mark element */
+function renderMark(cell, mark){
+  cell.innerHTML = '';
+  const el = document.createElement('div');
+  el.className = 'mark ' + (mark === 'X' ? 'x' : 'o');
+  el.textContent = mark;
+  cell.appendChild(el);
+  requestAnimationFrame(()=> el.classList.add('show'));
+}
+
+/* place move */
+function place(idx){
+  if(!active) return;
+  if(board[idx] !== '') return;
+  board[idx] = currentPlayer;
+  history.push({idx, player: currentPlayer});
+  const cell = cells[idx];
+  ripple(cell);
+  renderMark(cell, currentPlayer);
+  playTone(currentPlayer === 'X' ? 780 : 420, 0.08, 'sine', 0.06);
+  // check win
+  const combo = getWinCombo(currentPlayer);
+  if(combo){
+    active = false;
+    statusLabel.textContent = `Player ${currentPlayer} Wins!`;
+    scores[currentPlayer]++; updateScores();
+    showWinLine(combo);
+    // celebration sound
+    playTone(520, 0.14, 'sawtooth', 0.06);
+    return;
+  }
+  if(board.every(c => c !== '')){
+    active = false;
+    statusLabel.textContent = "It's a Draw!";
+    scores.D++; updateScores();
+    return;
+  }
+  // swap
+  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+  statusLabel.textContent = `Player ${currentPlayer}'s Turn`;
+  // if AI mode and it's AI turn -> call ai
+  if(modeSelect.value !== 'pvp' && isAiTurn()){
+    setTimeout(()=> aiMove(), 260);
+  }
+}
+
+/* detect win combo for mark */
+function getWinCombo(mark){
+  return wins.find(c => c.every(i => board[i] === mark));
+}
+
+/* show animated SVG win line between centers of first and last of combo */
+function showWinLine(combo){
+  winSvg.innerHTML = '';
+  const rect = document.getElementById('board')?.getBoundingClientRect ? document.getElementById('board').getBoundingClientRect() : document.body.getBoundingClientRect();
+  const p0 = cells[combo[0]].getBoundingClientRect();
+  const p2 = cells[combo[2]].getBoundingClientRect();
+  const x1 = ((p0.left + p0.right)/2 - rect.left) / rect.width * 100;
+  const y1 = ((p0.top + p0.bottom)/2 - rect.top) / rect.height * 100;
+  const x2 = ((p2.left + p2.right)/2 - rect.left) / rect.width * 100;
+  const y2 = ((p2.top + p2.bottom)/2 - rect.top) / rect.height * 100;
+
+  // line element
+  const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1', x1 + '%'); line.setAttribute('y1', y1 + '%');
+  line.setAttribute('x2', x1 + '%'); line.setAttribute('y2', y1 + '%');
+  line.setAttribute('stroke-width','6');
+  line.setAttribute('stroke-linecap','round');
+  line.setAttribute('stroke', `url(#g${Date.now()})`);
+  winSvg.appendChild(line);
+
+  // gradient
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+  const grad = document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+  const id = 'g' + Date.now();
+  grad.id = id; grad.setAttribute('x1','0'); grad.setAttribute('y1','0'); grad.setAttribute('x2','1'); grad.setAttribute('y2','0');
+  const s1 = document.createElementNS('http://www.w3.org/2000/svg','stop'); s1.setAttribute('offset','0%'); s1.setAttribute('stop-color','#fff'); s1.setAttribute('stop-opacity','0.9');
+  const s2 = document.createElementNS('http://www.w3.org/2000/svg','stop'); s2.setAttribute('offset','100%'); s2.setAttribute('stop-color','#fff'); s2.setAttribute('stop-opacity','0.35');
+  grad.appendChild(s1); grad.appendChild(s2); defs.appendChild(grad); winSvg.appendChild(defs);
+  line.setAttribute('stroke', `url(#${id})`);
+
+  const dur = 420;
+  const start = performance.now();
+  function anim(t){
+    const p = Math.min(1,(t-start)/dur);
+    const ease = 1 - Math.pow(1-p,3);
+    const currX = x1 + (x2 - x1) * ease;
+    const currY = y1 + (y2 - y1) * ease;
+    line.setAttribute('x2', currX + '%');
+    line.setAttribute('y2', currY + '%');
+    if(p < 1) requestAnimationFrame(anim);
+  }
+  requestAnimationFrame(anim);
+}
+
+/* reset board */
+function resetBoard(start=null){
+  board.fill('');
+  history = [];
+  active = true;
+  currentPlayer = start || starterSelect.value || 'X';
+  statusLabel.textContent = `Player ${currentPlayer}'s Turn`;
+  cells.forEach(c => c.innerHTML = '');
+  winSvg.innerHTML = '';
+}
+
+/* undo */
+function undo(){
+  if(history.length === 0 || !active) {
+    // if game ended, allow undo of last move only if ended by mistake
+    if(!active && history.length>0){
+      // allow undo to continue match
+    } else return;
+  }
+  const last = history.pop();
+  board[last.idx] = '';
+  cells[last.idx].innerHTML = '';
+  currentPlayer = last.player;
+  statusLabel.textContent = `Player ${currentPlayer}'s Turn`;
+  active = true;
+  winSvg.innerHTML = '';
+}
+
+/* scores display */
+function updateScores(){
+  scoresEl.textContent = `X: ${scores.X}  O: ${scores.O}  Draw: ${scores.D}`;
+}
+
+/* keyboard map (numpad style) */
+const keyMap = {'1':6,'2':7,'3':8,'4':3,'5':4,'6':5,'7':0,'8':1,'9':2};
+document.addEventListener('keydown', e=>{
+  if(!active) return;
+  if(keyMap[e.key] !== undefined){
+    const idx = keyMap[e.key];
+    if(board[idx] === '') place(idx);
+  }
+});
+
+/* attach event listeners to cells */
+cells.forEach(c=>{
+  const idx = Number(c.dataset.index);
+  // touchstart for instant response on mobile
+  c.addEventListener('touchstart', e => {
+    e.preventDefault();
+    if(!active) return;
+    if(board[idx] !== '') return;
+    place(idx);
+  }, {passive:false});
+  c.addEventListener('click', e=>{
+    if(!active) return;
+    if(board[idx] !== '') return;
+    place(idx);
+  });
+});
+
+/* control buttons */
+restartBtn.addEventListener('click', ()=> {
+  resetBoard(starterSelect.value);
+  playTone(300, 0.06, 'sine', 0.06);
+});
+undoBtn.addEventListener('click', ()=> { undo(); playTone(240,0.05,'triangle',0.04); });
+
+modeSelect.addEventListener('change', ()=> {
+  resetBoard(starterSelect.value);
+});
+starterSelect.addEventListener('change', ()=> resetBoard(starterSelect.value));
+soundToggle.addEventListener('click', ()=> {
+  soundOn = !soundOn;
+  soundToggle.textContent = soundOn ? 'On' : 'Off';
+  if(soundOn) playTone(640,0.06,'sine',0.06);
+});
+
+/* simple AI (easy: random, hard: minimax) */
+function isAiTurn(){
+  const mode = modeSelect.value;
+  if(mode === 'pvp') return false;
+  // when AI mode is on, AI plays the currentPlayer if the starter and roles allow:
+  // if starter is X and currentPlayer equals selected AI mark:
+  const humanStarts = starterSelect.value;
+  // determine AI mark: AI = opposite of starter (so human always starts with starter)
+  const aiMark = (humanStarts === 'X') ? 'O' : 'X';
+  return currentPlayer === aiMark;
+}
+
+function aiMove(){
+  if(!active) return;
+  const mode = modeSelect.value;
+  const avail = board.map((v,i)=> v===''?i:null).filter(i=>i!==null);
+  let pick = null;
+  if(mode === 'ai-easy'){
+    pick = avail[Math.floor(Math.random()*avail.length)];
+  } else {
+    // minimax (hard)
+    const ai = currentPlayer;
+    const res = minimax(board.slice(), ai, ai);
+    pick = res.index;
+  }
+  if(pick !== null && pick !== undefined) place(pick);
+}
+
+/* minimax implementation */
+function minimax(b, player, aiPlayer){
+  const empty = b.map((v,i)=> v===''?i:null).filter(i=>i!==null);
+  // terminal
+  if(checkBoardWin(b, 'X')) return {score: (aiPlayer === 'X') ? -10 : 10};
+  if(checkBoardWin(b, 'O')) return {score: (aiPlayer === 'O') ? -10 : 10};
+  if(empty.length === 0) return {score:0};
+
+  const moves = [];
+  for(const i of empty){
+    const obj = {};
+    obj.index = i;
+    b[i] = player;
+    if(checkBoardWin(b, 'X')) obj.score = (aiPlayer === 'X') ? -10 + empty.length : 10 - empty.length;
+    else if(checkBoardWin(b, 'O')) obj.score = (aiPlayer === 'O') ? -10 + empty.length : 10 - empty.length;
+    else {
+      const res = minimax(b, player === 'X' ? 'O' : 'X', aiPlayer);
+      obj.score = res.score;
+    }
+    b[i] = '';
+    moves.push(obj);
+  }
+  let bestMove;
+  if(player === aiPlayer){
+    let best = -Infinity;
+    for(const m of moves) if(m.score > best){ best = m.score; bestMove = m; }
+  } else {
+    let best = Infinity;
+    for(const m of moves) if(m.score < best){ best = m.score; bestMove = m; }
+  }
+  return bestMove;
+}
+function checkBoardWin(b, mark){ return wins.some(c => c.every(i => b[i] === mark)); }
+
+/* initialize with selected starter */
+resetBoard(starterSelect.value);
+updateScores();
+
+/* small resume: if file opened from disk, user gesture required to start audio context on some browsers */
+document.addEventListener('click', function _initSound(){
+  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  document.removeEventListener('click', _initSound);
+});
+</script>
+</body>
+</html>

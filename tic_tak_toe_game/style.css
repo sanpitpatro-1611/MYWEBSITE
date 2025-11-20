@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+    background: #111;
+    color: white;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.title {
+    margin-top: 20px;
+    font-size: 40px;
+}
+
+.board {
+    width: 300px;
+    height: 300px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
+.cell {
+    background: #333;
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+.cell:hover {
+    background: #555;
+}
+
+.cell.active {
+    transform: scale(1.1);
+}
+
+.btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 20px;
+    background: white;
+    color: black;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
