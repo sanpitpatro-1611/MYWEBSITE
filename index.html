@@ -6,6 +6,7 @@
   <title>Sanpit Patro | My Website</title>
   <link href="style.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<a href="#" onclick="logout()">Logout</a>
 </head>
 <body>
 <nav class="navbar">
@@ -40,6 +41,12 @@ function toggleMenu() {
   <footer>
     © 2025 <span>Sanpit Patro</span> 
   </footer>
+<script>
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+</script>
 
 </body>
 </html>
