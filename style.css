@@ -249,7 +249,7 @@ h1, h2, p {
 }
 
 /* MOBILE RESPONSIVE */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .nav-links {
         display: none;
         position: absolute;
@@ -271,6 +271,35 @@ h1, h2, p {
         display: block;
     }
 }
+/* Mobile: show 3 dots */
+.menu-icon {
+    display: block;
+    font-size: 28px;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 22px;
+}
+
+/* Mobile: hide normal menu */
+nav ul {
+    display: none;
+}
+
+/* When menu is opened */
+nav ul.show {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,0,0,0.7);
+    padding: 15px 0;
+}
+
+nav ul.show li {
+    padding: 10px 0;
+}
+
 /* Default Desktop Menu */
 .navbar {
     display: flex;
