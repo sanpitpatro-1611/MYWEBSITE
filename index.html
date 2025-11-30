@@ -7,6 +7,52 @@
 <title>Login • Sanpit Website</title>
 
 <style>
+/* LOGIN BOX: responsive, full width on mobile, fixed max width on laptop */
+.container {
+    width: 90%;
+    max-width: 420px;       /* keeps it nice on laptop */
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(90,0,255,0.18), rgba(0,150,255,0.12));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,150,255,0.35);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 24px rgba(0,150,255,0.15);
+    color: white;
+    text-align: center;
+}
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 16px;
+}
+button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg, #6000ff, #009dff);
+    color: white;
+}
+/* MOBILE ADJUSTMENTS */
+@media (max-width: 480px) {
+  .container {
+    width: 94%;
+    padding: 22px;
+    border-radius: 16px;
+  }
+  h2 { font-size: 22px; }
+  p { font-size: 15px; }
+  input, button { font-size: 17px; padding: 14px; }
+}
+
 /* MOBILE RESPONSIVE FIX */
 @media (max-width: 600px) {
     .container {
@@ -37,7 +83,9 @@
     }
 }
 
-body {
+body
+
+ {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background: #000000; /* Black background */
