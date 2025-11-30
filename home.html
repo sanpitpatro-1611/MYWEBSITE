@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanpit Patro | My Website</title>
+  <link href="style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<a href="#" onclick="logout()">Logout</a>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">Sanpit Patro</div>
+
+    <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Me</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <a href="tic-tac-toe.html">Play Tic Tac Toe</a>
+    </ul>
+
+<div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+</nav>
+
+<script>
+function toggleMenu() {
+    document.getElementById("navLinks").classList.toggle("show");
+}
+</script>
+  <header>
+    <h1>Welcome to My Website</h1>
+    <p>Hi, I'm <strong>Sanpit Patro</strong> — a B.Sc. IT student !</p>
+  </header>
+
+  <div class="container">
+    <h2>About This Project</h2>
+    <p>This is my first personal website — built completely from scratch using Notepad and basic HTML & CSS. </p>
+  </div>
+
+  <footer>
+    © 2025 <span>Sanpit Patro</span> 
+  </footer>
+<script>
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
+
+
+

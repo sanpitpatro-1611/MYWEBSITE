@@ -1,55 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sanpit Patro | My Website</title>
-  <link href="style.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<a href="#" onclick="logout()">Logout</a>
-</head>
-<body>
-<nav class="navbar">
-    <div class="logo">Sanpit Patro</div>
+<meta charset="UTF-8">
+<title>Login • Sanpit Website</title>
 
-    <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Me</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <a href="tic-tac-toe.html">Play Tic Tac Toe</a>
-    </ul>
-
-<div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-</nav>
-
-<script>
-function toggleMenu() {
-    document.getElementById("navLinks").classList.toggle("show");
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #000000; /* Black background */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-</script>
-  <header>
-    <h1>Welcome to My Website</h1>
-    <p>Hi, I'm <strong>Sanpit Patro</strong> — a B.Sc. IT student !</p>
-  </header>
 
-  <div class="container">
-    <h2>About This Project</h2>
-    <p>This is my first personal website — built completely from scratch using Notepad and basic HTML & CSS. </p>
-  </div>
+/* Gradient Box */
+.container {
+    width: 360px;
+    padding: 35px;
+    border-radius: 18px;
 
-  <footer>
-    © 2025 <span>Sanpit Patro</span> 
-  </footer>
+    background: linear-gradient(135deg, rgba(90,0,255,0.25), rgba(0,150,255,0.25));
+    backdrop-filter: blur(15px);
+
+    border: 2px solid rgba(0,150,255,0.5);
+    box-shadow: 0 0 25px rgba(0,150,255,0.4),
+                0 0 35px rgba(120,0,255,0.4);
+
+    animation: fadeIn 0.8s ease;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Heading */
+h2 {
+    color: #00c8ff;
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 15px #009dff;
+}
+
+p {
+    color: #bcdfff;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Input fields */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 18px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    background: rgba(255,255,255,0.2);
+    box-shadow: 0 0 15px #008cff;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6000ff, #009dff);
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 18px #008cff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Welcome</h2>
+    <p>Please enter your details</p>
+
+    <input type="text" id="name" placeholder="Your Name">
+    <input type="password" id="pass" placeholder="Create Password">
+    <button onclick="register()">Enter</button>
+</div>
+
 <script>
-function logout() {
-    localStorage.clear();
-    window.location.href = "login.html";
+function register() {
+    let username = document.getElementById("name").value.trim();
+    let password = document.getElementById("pass").value.trim();
+
+    if (username === "" || password === "") {
+        alert("Please fill both fields!");
+        return;
+    }
+
+    /* Store temporarily */
+    localStorage.setItem("websiteUser", username);
+    localStorage.setItem("websitePass", password);
+
+   window.location.href = "home.html";// redirect to your website
 }
 </script>
 
 </body>
 </html>
-
-
-
