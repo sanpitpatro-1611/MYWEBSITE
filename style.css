@@ -346,4 +346,33 @@ h1, h2, p {
         color: cyan;
     }
 }
+/* MOBILE RESPONSIVE FIX */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 28px;
+        border-radius: 20px;
+    }
+
+    h2 {
+        font-size: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        font-size: 16px;
+        margin-bottom: 25px;
+    }
+
+    input {
+        padding: 15px;
+        font-size: 17px;
+        margin-bottom: 20px;
+    }
+
+    button {
+        padding: 15px;
+        font-size: 18px;
+    }
+}
 
